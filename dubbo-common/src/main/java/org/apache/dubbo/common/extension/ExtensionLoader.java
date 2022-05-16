@@ -78,6 +78,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.DEFAULT_KEY;
 import static org.apache.dubbo.common.constants.CommonConstants.REMOVE_VALUE_PREFIX;
 
 /**
+ * ，这是 dubbo 实现 SPI 扩展机制 的核心，几乎所有实现的逻辑都被封装在 ExtensionLoader 中，其源码如下。
  * {@link org.apache.dubbo.rpc.model.ApplicationModel}, {@code DubboBootstrap} and this class are
  * at present designed to be singleton or static (by itself totally static or uses some static fields).
  * So the instances returned from them are of process or classloader scope. If you want to support
@@ -103,8 +104,10 @@ public class ExtensionLoader<T> {
 
     private final ConcurrentMap<Class<?>, Object> extensionInstances = new ConcurrentHashMap<>(64);
 
+    // 扩展接口
     private final Class<?> type;
 
+    // 对象注入工厂
     private final ExtensionInjector injector;
 
     private final ConcurrentMap<Class<?>, String> cachedNames = new ConcurrentHashMap<>();
@@ -201,20 +204,6 @@ public class ExtensionLoader<T> {
     @Deprecated
     public static <T> ExtensionLoader<T> getExtensionLoader(Class<T> type) {
         return ApplicationModel.defaultModel().getDefaultModule().getExtensionLoader(type);
-    }
-
-    // For testing purposes only
-    public static void resetExtensionLoader(Class type) {
-//        ExtensionLoader loader = EXTENSION_LOADERS.get(type);
-//        if (loader != null) {
-//            // Remove all instances associated with this loader as well
-//            Map<String, Class<?>> classes = loader.getExtensionClasses();
-//            for (Map.Entry<String, Class<?>> entry : classes.entrySet()) {
-//                EXTENSION_INSTANCES.remove(entry.getValue());
-//            }
-//            classes.clear();
-//            EXTENSION_LOADERS.remove(type);
-//        }
     }
 
     public void destroy() {
@@ -746,6 +735,9 @@ public class ExtensionLoader<T> {
         return new IllegalStateException(buf.toString());
     }
 
+    /**
+     * SPI ExtensionLoader真正实现的地方
+     */
     @SuppressWarnings("unchecked")
     private T createExtension(String name, boolean wrap) {
         Class<?> clazz = getExtensionClasses().get(name);
@@ -785,6 +777,7 @@ public class ExtensionLoader<T> {
             }
 
             // Warning: After an instance of Lifecycle is wrapped by cachedWrapperClasses, it may not still be Lifecycle instance, this application may not invoke the lifecycle.initialize hook.
+            // 初始化那些继承LifeCycle
             initExtension(instance);
             return instance;
         } catch (Throwable t) {
@@ -839,6 +832,8 @@ public class ExtensionLoader<T> {
                 if (method.getAnnotation(DisableInject.class) != null) {
                     continue;
                 }
+
+                // cxf 只能注入遵循常规set方法的field
                 Class<?> pt = method.getParameterTypes()[0];
                 if (ReflectUtils.isPrimitives(pt)) {
                     continue;

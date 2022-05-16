@@ -29,7 +29,8 @@ public class SpringContainerTest {
 
     @Test
     public void testContainer() {
-        SpringContainer container = (SpringContainer) ExtensionLoader.getExtensionLoader(Container.class).getExtension("spring");
+        ExtensionLoader<Container> extensionLoader = ExtensionLoader.getExtensionLoader(Container.class);
+        SpringContainer container = (SpringContainer) extensionLoader.getExtension("spring");
         container.start();
         Assertions.assertEquals(SpringContainer.class, container.context.getBean("container").getClass());
         container.stop();
