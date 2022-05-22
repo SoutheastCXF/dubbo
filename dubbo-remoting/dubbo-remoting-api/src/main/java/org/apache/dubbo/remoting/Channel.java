@@ -20,6 +20,8 @@ import java.net.InetSocketAddress;
 
 /**
  * Channel. (API/SPI, Prototype, ThreadSafe)
+ * Channel 和 Client 是一对一的关系
+ * Channel 和 Server 是 多对一的关系
  *
  * @see org.apache.dubbo.remoting.Client
  * @see RemotingServer#getChannels()

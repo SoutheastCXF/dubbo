@@ -25,6 +25,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 /**
+ * Register a concrete implementation of this interface with a Launcher to be notified of events that occur during test execution.
+ *
+ *
  * The abstract implementation provides the basic methods. <p></p>
  * {@link #needRegistryCenter(TestPlan)}: checks if current {@link TestPlan} need registry center.
  */

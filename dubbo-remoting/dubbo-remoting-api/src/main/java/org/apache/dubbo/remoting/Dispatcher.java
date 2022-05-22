@@ -23,6 +23,10 @@ import org.apache.dubbo.common.extension.SPI;
 import org.apache.dubbo.remoting.transport.dispatcher.all.AllDispatcher;
 
 /**
+ * 调度器接口，不同的调度器实现，将操作转发到对应的线程池上
+ * 如果这三个key对应的值都为控，就选择AllDispatcher来实现
+ * 默认实现 AllDispatcher
+ *
  * ChannelHandlerWrapper (SPI, Singleton, ThreadSafe)
  */
 @SPI(value = AllDispatcher.NAME, scope = ExtensionScope.FRAMEWORK)

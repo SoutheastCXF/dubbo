@@ -32,6 +32,7 @@ public interface RemotingServer extends Endpoint, Resetable, IdleSensible {
 
     /**
      * is bound.
+     * 是否绑定本地端口，提供服务
      *
      * @return bound
      */
@@ -54,5 +55,4 @@ public interface RemotingServer extends Endpoint, Resetable, IdleSensible {
 
     @Deprecated
     void reset(org.apache.dubbo.common.Parameters parameters);
-
 }

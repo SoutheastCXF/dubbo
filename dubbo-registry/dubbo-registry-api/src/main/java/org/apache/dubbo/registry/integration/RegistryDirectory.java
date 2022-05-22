@@ -83,7 +83,13 @@ import static org.apache.dubbo.rpc.model.ScopeModelUtil.getApplicationModel;
 
 
 /**
+ * important
  * RegistryDirectory
+ * 注册服务中心，维护着所有可用的远程Invoker或者本地的Invoker，它的Invoker集合是从注册中心获取的
+ *
+ * 实现了NotifyListener
+ *  -> 消费方要调用某远程服务，会向注册中心订阅这个服务的所有服务提供方，在订阅及服务提供方的数据发生变动时，
+ *          回调消费方的NotifyListener服务的notify方法，回调接口传入所有服务提供方的url地址然后将urls转化为invokers
  */
 public class RegistryDirectory<T> extends DynamicDirectory<T> {
     private static final Logger logger = LoggerFactory.getLogger(RegistryDirectory.class);

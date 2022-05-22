@@ -26,6 +26,8 @@ import java.util.List;
 
 /**
  * Router. (SPI, Prototype, ThreadSafe)
+ *
+ * SPI可扩展， dubbo的路由规则器
  * <p>
  * <a href="http://en.wikipedia.org/wiki/Routing">Routing</a>
  *

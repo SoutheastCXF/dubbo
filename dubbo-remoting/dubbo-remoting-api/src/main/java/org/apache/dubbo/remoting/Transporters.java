@@ -23,6 +23,7 @@ import org.apache.dubbo.remoting.transport.ChannelHandlerDispatcher;
 
 /**
  * Transporter facade. (API, Static, ThreadSafe)
+ * facade 模式。 通过该类的包装，隐藏了内部具体的实现细节，降低了程序的复杂度
  */
 public class Transporters {
 
@@ -74,6 +75,7 @@ public class Transporters {
         return getTransporter(url).connect(url, handler);
     }
 
+    //
     public static Transporter getTransporter(URL url) {
         return url.getOrDefaultFrameworkModel().getExtensionLoader(Transporter.class).getAdaptiveExtension();
     }

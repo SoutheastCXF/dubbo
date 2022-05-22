@@ -154,7 +154,7 @@ public class ServiceDiscoveryRegistry extends FailbackRegistry {
     }
 
     @Override
-    public final void register(URL url) {
+    public final void  register(URL url) {
         if (!shouldRegister(url)) { // Should Not Register
             return;
         }

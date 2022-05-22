@@ -37,7 +37,7 @@ import java.util.List;
 public interface LoadBalance {
 
     /**
-     * select one invoker in list.
+     * select one invoker in list. 负载均衡
      *
      * @param invokers   invokers.
      * @param url        refer url

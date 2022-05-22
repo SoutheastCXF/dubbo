@@ -27,6 +27,11 @@ import java.lang.annotation.Target;
 /**
  * Provide helpful information for {@link ExtensionLoader} to inject dependency extension instance.
  *
+ * 如果不使用@Adaptive，使用@SPI标记的所有扩展均被默认加载，耗费性能
+ * 使用@Adaptive的扩展被选择加载，可以加载整个扩展点中某个功能点
+ * 被该注解修饰的方法。其入参都是URL。通过URL中的parameter来动态加载相应实现类
+ *
+ * @author leo
  * @see ExtensionLoader
  * @see URL
  */
@@ -34,6 +39,7 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Adaptive {
+
     /**
      * Decide which target extension to be injected. The name of the target extension is decided by the parameter passed
      * in the URL, and the parameter names are given by this method.

@@ -49,6 +49,12 @@ public abstract class AbstractRegistryFactory implements RegistryFactory, ScopeM
         this.registryManager = applicationModel.getBeanFactory().getBean(RegistryManager.class);
     }
 
+    /**
+     * 获得注册中心 Registry 对象
+     *
+     * @param url 注册中心地址，不允许为空
+     * @return Registry 对象
+     */
     @Override
     public Registry getRegistry(URL url) {
         if (registryManager == null) {
@@ -61,6 +67,7 @@ public abstract class AbstractRegistryFactory implements RegistryFactory, ScopeM
             return defaultNopRegistry;
         }
 
+        // 修改URL
         url = URLBuilder.from(url)
             .setPath(RegistryService.class.getName())
             .addParameter(INTERFACE_KEY, RegistryService.class.getName())

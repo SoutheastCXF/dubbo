@@ -32,6 +32,7 @@ public interface RegistryFactory {
 
     /**
      * Connect to the registry
+     * 根据URL上的protocol进行动态扩展
      * <p>
      * Connecting the registry needs to support the contract: <br>
      * 1. When the check=false is set, the connection is not checked, otherwise the exception is thrown when disconnection <br>

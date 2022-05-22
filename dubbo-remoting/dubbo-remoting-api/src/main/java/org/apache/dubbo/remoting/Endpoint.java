@@ -22,6 +22,10 @@ import java.net.InetSocketAddress;
 
 /**
  * Endpoint. (API/SPI, Prototype, ThreadSafe)
+ * important
+ * dubbo抽象出了一个端的概念，也就是Endpoint接口。 点与点之间可以双向传输。在端的基础上再衍生出通道、客户端、服务端的概念
+ *
+ * Channel / Client / Server  【继承Endpoint的核心类】
  *
  *
  * @see org.apache.dubbo.remoting.Channel

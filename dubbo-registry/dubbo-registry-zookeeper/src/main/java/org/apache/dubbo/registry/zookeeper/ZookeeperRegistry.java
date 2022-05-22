@@ -143,6 +143,7 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
         }
     }
 
+    // important subscribe 这里好好学一学
     @Override
     public void doSubscribe(final URL url, final NotifyListener listener) {
         try {

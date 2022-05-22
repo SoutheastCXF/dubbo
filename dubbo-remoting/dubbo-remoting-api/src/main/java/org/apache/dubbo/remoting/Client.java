@@ -23,6 +23,8 @@ import org.apache.dubbo.common.Resetable;
  * <p>
  * <a href="http://en.wikipedia.org/wiki/Client%E2%80%93server_model">Client/Server</a>
  *
+ * 客户端接口继承了Endpoint、Channel和Resetable
+ *
  * @see org.apache.dubbo.remoting.Transporter#connect(org.apache.dubbo.common.URL, ChannelHandler)
  */
 public interface Client extends Endpoint, Channel, Resetable, IdleSensible {

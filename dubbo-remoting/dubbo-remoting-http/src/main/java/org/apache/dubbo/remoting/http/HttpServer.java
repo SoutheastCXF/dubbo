@@ -56,13 +56,6 @@ public interface HttpServer extends Resetable, RemotingServer {
     void close(int timeout);
 
     /**
-     * is bound.
-     *
-     * @return bound
-     */
-    boolean isBound();
-
-    /**
      * is closed.
      *
      * @return closed

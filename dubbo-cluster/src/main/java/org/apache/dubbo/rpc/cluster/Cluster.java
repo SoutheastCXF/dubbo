@@ -38,6 +38,10 @@ public interface Cluster {
 
     /**
      * Merge the directory invokers to a virtual invoker.
+     * 集群容错：Cluster将Directory中的多个Invoker伪装成一个Invoker，对上层透明，伪装过程中包容了容错逻辑，调用失败后，重试另一个
+     *
+     *
+     * 其实就是Directory提供了一个目录，然后Cluster类能够获取一个虚拟的Invoker
      *
      * @param <T>
      * @param directory

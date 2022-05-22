@@ -36,6 +36,7 @@ public interface Directory<T> extends Node {
 
     /**
      * get service type.
+     * example: com.alibaba.dubbo.demo.DemoService
      *
      * @return service type.
      */
@@ -44,6 +45,7 @@ public interface Directory<T> extends Node {
     /**
      * list invokers.
      * filtered by invocation
+     * 获得所有服务Invoker集合
      *
      * @return invokers
      */

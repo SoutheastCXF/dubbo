@@ -42,6 +42,7 @@ import static org.apache.dubbo.registry.Constants.REGISTRY_RETRY_PERIOD_KEY;
 
 /**
  * FailbackRegistry. (SPI, Prototype, ThreadSafe)
+ * AbstractRegistry中的注册、订阅等方法，实际上就是一些内存缓存的变化，而真正的注册订阅的实现逻辑在FailbackRegistry实现
  */
 public abstract class FailbackRegistry extends AbstractRegistry {
 
@@ -68,6 +69,7 @@ public abstract class FailbackRegistry extends AbstractRegistry {
         this.retryPeriod = url.getParameter(REGISTRY_RETRY_PERIOD_KEY, DEFAULT_REGISTRY_RETRY_PERIOD);
 
         // since the retry task will not be very much. 128 ticks is enough.
+        // 定时任务执行器
         retryTimer = new HashedWheelTimer(new NamedThreadFactory("DubboRegistryRetryTimer", true), retryPeriod, TimeUnit.MILLISECONDS, 128);
     }
 
@@ -201,11 +203,13 @@ public abstract class FailbackRegistry extends AbstractRegistry {
         removeFailedRegistered(url);
         removeFailedUnregistered(url);
         try {
+            // important 向注册中心发送注册 [zookeeper / nacos 等等]
             // Sending a registration request to the server side
             doRegister(url);
         } catch (Exception e) {
             Throwable t = e;
 
+            // 如果开启启动时检查，直接抛异常
             // If the startup detection is opened, the Exception is thrown directly.
             boolean check = getUrl().getParameter(Constants.CHECK_KEY, true)
                     && url.getParameter(Constants.CHECK_KEY, true)
@@ -359,6 +363,7 @@ public abstract class FailbackRegistry extends AbstractRegistry {
         if (listener == null) {
             throw new IllegalArgumentException("notify listener == null");
         }
+        // 通知监听器
         try {
             doNotify(url, listener, urls);
         } catch (Exception t) {
@@ -373,7 +378,7 @@ public abstract class FailbackRegistry extends AbstractRegistry {
 
     @Override
     protected void recover() throws Exception {
-        // register
+        // register 恢复注册 添加到 `failedNotify`
         Set<URL> recoverRegistered = new HashSet<URL>(getRegistered());
         if (!recoverRegistered.isEmpty()) {
             if (logger.isInfoEnabled()) {
@@ -383,6 +388,7 @@ public abstract class FailbackRegistry extends AbstractRegistry {
                 // remove fail registry or unRegistry task first.
                 removeFailedRegistered(url);
                 removeFailedUnregistered(url);
+                // important 定时任务会重试
                 addFailedRegistered(url);
             }
         }

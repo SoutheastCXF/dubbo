@@ -86,6 +86,7 @@ public class RouterChain<T> {
             .sorted(Router::compareTo)
             .collect(Collectors.toList());
 
+        // init routers
         initWithRouters(routers);
 
         List<StateRouterFactory> extensionStateRouterFactories = moduleModel

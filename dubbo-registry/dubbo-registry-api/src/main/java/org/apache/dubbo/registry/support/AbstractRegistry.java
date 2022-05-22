@@ -86,7 +86,11 @@ public abstract class AbstractRegistry implements Registry {
     private final AtomicLong lastCacheChanged = new AtomicLong();
     private final AtomicInteger savePropertiesRetryTimes = new AtomicInteger();
     private final Set<URL> registered = new ConcurrentHashSet<>();
+
+    //  订阅 URL 的监听器集合
     private final ConcurrentMap<URL, Set<NotifyListener>> subscribed = new ConcurrentHashMap<>();
+
+    // 被通知的URL集合
     private final ConcurrentMap<URL, Map<String, List<URL>>> notified = new ConcurrentHashMap<>();
     // Is it synchronized to save the file
     private boolean syncSaveFile;
@@ -101,6 +105,8 @@ public abstract class AbstractRegistry implements Registry {
         registryManager = url.getOrDefaultApplicationModel().getBeanFactory().getBean(RegistryManager.class);
         localCacheEnabled = url.getParameter(REGISTRY_LOCAL_FILE_CACHE_ENABLED, true);
         registryCacheExecutor = url.getOrDefaultApplicationModel().getDefaultExtension(ExecutorRepository.class).getSharedExecutor();
+
+        // 只有支持本地缓存才会进入如下分支
         if (localCacheEnabled) {
             // Start file save timer
             syncSaveFile = url.getParameter(REGISTRY_FILESAVE_SYNC_KEY, false);
@@ -446,6 +452,7 @@ public abstract class AbstractRegistry implements Registry {
         }
     }
 
+    // 保存单个消费者URL对应，在`notified`的数据，到文件
     private void saveProperties(URL url) {
         if (file == null) {
             return;

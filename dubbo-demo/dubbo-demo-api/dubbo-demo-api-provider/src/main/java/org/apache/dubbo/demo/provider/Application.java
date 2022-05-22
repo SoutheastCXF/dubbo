@@ -27,6 +27,9 @@ import org.apache.dubbo.demo.DemoService;
 
 import java.util.concurrent.CountDownLatch;
 
+/**
+ * important demo.application.provider的启动类
+ */
 public class Application {
     public static void main(String[] args) throws Exception {
         if (isClassic(args)) {
