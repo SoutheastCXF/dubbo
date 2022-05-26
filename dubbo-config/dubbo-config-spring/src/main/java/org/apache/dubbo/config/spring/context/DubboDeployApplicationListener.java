@@ -39,6 +39,7 @@ import org.springframework.core.Ordered;
 import java.util.concurrent.Future;
 
 /**
+ * Dubbo采用事件监听机制，实现在spring启动后，接收publishEvent事件，从而实现dubbo启动
  * An ApplicationListener to control Dubbo application.
  */
 public class DubboDeployApplicationListener implements ApplicationListener<ApplicationContextEvent>, ApplicationContextAware, Ordered {
@@ -94,9 +95,11 @@ public class DubboDeployApplicationListener implements ApplicationListener<Appli
 
     @Override
     public void onApplicationEvent(ApplicationContextEvent event) {
+        // 事件刷新事件
         if (event instanceof ContextRefreshedEvent) {
             onContextRefreshedEvent((ContextRefreshedEvent) event);
         } else if (event instanceof ContextClosedEvent) {
+            // 事件结束事件
             onContextClosedEvent((ContextClosedEvent) event);
         }
     }

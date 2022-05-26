@@ -296,8 +296,10 @@ public abstract class FailbackRegistry extends AbstractRegistry {
     @Override
     public void subscribe(URL url, NotifyListener listener) {
         super.subscribe(url, listener);
+        // 在订阅开始时，先移除
         removeFailedSubscribed(url, listener);
         try {
+            // important
             // Sending a subscription request to the server side
             doSubscribe(url, listener);
         } catch (Exception e) {
@@ -363,6 +365,7 @@ public abstract class FailbackRegistry extends AbstractRegistry {
         if (listener == null) {
             throw new IllegalArgumentException("notify listener == null");
         }
+        // important
         // 通知监听器
         try {
             doNotify(url, listener, urls);

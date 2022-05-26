@@ -41,6 +41,7 @@ import org.w3c.dom.Element;
 
 /**
  * DubboNamespaceHandler
+ * 当Spring遇到Dubbo为命名空间的xml时，会调用该方法
  *
  * @export
  */
@@ -50,8 +51,14 @@ public class DubboNamespaceHandler extends NamespaceHandlerSupport implements Co
         Version.checkDuplicate(DubboNamespaceHandler.class);
     }
 
+    /**
+     * <dubbo:application../>
+     * <dubbo:registry../>
+     * <dubbo:service../>
+     */
     @Override
     public void init() {
+        // 加载基本配置信息
         registerBeanDefinitionParser("application", new DubboBeanDefinitionParser(ApplicationConfig.class));
         registerBeanDefinitionParser("module", new DubboBeanDefinitionParser(ModuleConfig.class));
         registerBeanDefinitionParser("registry", new DubboBeanDefinitionParser(RegistryConfig.class));
@@ -63,6 +70,7 @@ public class DubboNamespaceHandler extends NamespaceHandlerSupport implements Co
         registerBeanDefinitionParser("provider", new DubboBeanDefinitionParser(ProviderConfig.class));
         registerBeanDefinitionParser("consumer", new DubboBeanDefinitionParser(ConsumerConfig.class));
         registerBeanDefinitionParser("protocol", new DubboBeanDefinitionParser(ProtocolConfig.class));
+        // important 开始业务流程
         registerBeanDefinitionParser("service", new DubboBeanDefinitionParser(ServiceBean.class));
         registerBeanDefinitionParser("reference", new DubboBeanDefinitionParser(ReferenceBean.class));
         registerBeanDefinitionParser("annotation", new AnnotationBeanDefinitionParser());

@@ -25,6 +25,7 @@ import org.apache.dubbo.common.utils.UrlUtils;
 
 import java.util.List;
 
+// Registry的包装类 【Registry & Listener】
 public class ListenerRegistryWrapper implements Registry {
     private static final Logger logger = LoggerFactory.getLogger(ListenerRegistryWrapper.class);
 

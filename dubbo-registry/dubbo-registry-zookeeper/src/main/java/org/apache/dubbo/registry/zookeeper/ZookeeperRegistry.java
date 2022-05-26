@@ -40,6 +40,7 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.CountDownLatch;
+import java.util.function.Function;
 
 import static org.apache.dubbo.common.constants.CommonConstants.ANY_VALUE;
 import static org.apache.dubbo.common.constants.CommonConstants.CHECK_KEY;
@@ -59,6 +60,7 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
 
     private final static Logger logger = LoggerFactory.getLogger(ZookeeperRegistry.class);
 
+    // root path
     private final static String DEFAULT_ROOT = "dubbo";
 
     private final String root;
@@ -149,17 +151,25 @@ public class ZookeeperRegistry extends CacheableFailbackRegistry {
         try {
             checkDestroyed();
             if (ANY_VALUE.equals(url.getServiceInterface())) {
-                String root = toRootPath();
+                String root = toRootPath(); //  /dubbo
                 boolean check = url.getParameter(CHECK_KEY, false);
+
+                // important  concurrentHashMap 防止并发丢失
                 ConcurrentMap<NotifyListener, ChildListener> listeners = zkListeners.computeIfAbsent(url, k -> new ConcurrentHashMap<>());
-                ChildListener zkListener = listeners.computeIfAbsent(listener, k -> (parentPath, currentChilds) -> {
-                    for (String child : currentChilds) {
-                        child = URL.decode(child);
-                        if (!anyServices.contains(child)) {
-                            anyServices.add(child);
-                            subscribe(url.setPath(child).addParameters(INTERFACE_KEY, child,
-                                Constants.CHECK_KEY, String.valueOf(check)), k);
-                        }
+                ChildListener zkListener = listeners.computeIfAbsent(listener, new Function<NotifyListener, ChildListener>() {
+                    @Override
+                    public ChildListener apply(NotifyListener k) {
+                        ChildListener childListener = (parentPath, currentChilds) -> {
+                            for (String child : currentChilds) {
+                                child = URL.decode(child);
+                                if (!anyServices.contains(child)) {
+                                    anyServices.add(child);
+                                    ZookeeperRegistry.this.subscribe(url.setPath(child).addParameters(INTERFACE_KEY, child,
+                                        Constants.CHECK_KEY, String.valueOf(check)), k);
+                                }
+                            }
+                        };
+                        return childListener;
                     }
                 });
                 zkClient.create(root, false);

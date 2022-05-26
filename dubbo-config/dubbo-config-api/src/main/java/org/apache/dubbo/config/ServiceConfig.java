@@ -211,6 +211,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T> {
         serviceMetadata.generateServiceKey();
     }
 
+    // important
     @Override
     public void export() {
         if (this.exported) {
@@ -364,6 +365,8 @@ public class ServiceConfig<T> extends ServiceConfigBase<T> {
         exported();
     }
 
+    // 启动流程
+    // <dubbo:service interface="" ref=""/>
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void doExportUrls() {
         ModuleServiceRepository repository = getScopeModel().getServiceRepository();
@@ -635,6 +638,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T> {
         if (withMetaData) {
             invoker = new DelegateProviderMetaDataInvoker(invoker, this);
         }
+        // important 服务注册
         Exporter<?> exporter = protocolSPI.export(invoker);
         exporters.add(exporter);
     }

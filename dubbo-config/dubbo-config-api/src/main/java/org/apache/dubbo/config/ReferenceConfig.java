@@ -272,6 +272,7 @@ public class ReferenceConfig<T> extends ReferenceConfigBase<T> {
 
         serviceMetadata.getAttachments().putAll(referenceParameters);
 
+        // important 创建refer代理对象
         ref = createProxy(referenceParameters);
 
         serviceMetadata.setTarget(ref);
@@ -472,14 +473,15 @@ public class ReferenceConfig<T> extends ReferenceConfigBase<T> {
 
 
     /**
+     * important!!
      * Make a remote reference, create a remote reference invoker
      */
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void createInvokerForRemote() {
         if (urls.size() == 1) {
             URL curUrl = urls.get(0);
-            invoker = protocolSPI.refer(interfaceClass,curUrl);
-            if (!UrlUtils.isRegistry(curUrl)){
+            invoker = protocolSPI.refer(interfaceClass, curUrl);
+            if (!UrlUtils.isRegistry(curUrl)) {
                 List<Invoker<?>> invokers = new ArrayList<>();
                 invokers.add(invoker);
                 invoker = Cluster.getCluster(scopeModel, Cluster.DEFAULT).join(new StaticDirectory(curUrl, invokers), true);

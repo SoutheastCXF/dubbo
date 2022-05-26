@@ -61,6 +61,7 @@ public class ZookeeperServiceDiscovery extends AbstractServiceDiscovery {
 
     private CuratorFramework curatorFramework;
 
+    // zooker注册服务的，rootPath
     private String rootPath;
 
     private org.apache.curator.x.discovery.ServiceDiscovery<ZookeeperInstance> serviceDiscovery;
@@ -93,6 +94,7 @@ public class ZookeeperServiceDiscovery extends AbstractServiceDiscovery {
     @Override
     public void doRegister(ServiceInstance serviceInstance) {
         try {
+            // zookeeper注册服务的实现接口 registerService
             serviceDiscovery.registerService(build(serviceInstance));
         } catch (Exception e) {
             throw new RpcException(REGISTRY_EXCEPTION, "Failed register instance " + serviceInstance.toString(), e);
@@ -192,6 +194,7 @@ public class ZookeeperServiceDiscovery extends AbstractServiceDiscovery {
     protected void registerServiceWatcher(String serviceName, ServiceInstancesChangedListener listener) {
         String path = buildServicePath(serviceName);
         try {
+            // zookeeper客户端
             curatorFramework.create().creatingParentsIfNeeded().forPath(path);
         } catch (KeeperException.NodeExistsException e) {
             // ignored

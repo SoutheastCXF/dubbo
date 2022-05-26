@@ -1,0 +1,4 @@
+DefaultApplicationDeployer
+DefaultModuleDeployer
+
+上面两个类是实现Dubbo启动的关键，代替了DubboBootstrap

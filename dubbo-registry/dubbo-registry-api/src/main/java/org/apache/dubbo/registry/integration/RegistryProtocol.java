@@ -129,6 +129,9 @@ import static org.apache.dubbo.rpc.model.ScopeModelUtil.getApplicationModel;
 
 /**
  * TODO, replace RegistryProtocol completely in the future.
+ *
+ *
+ * 现有场景下RegistryProtocol是核心
  */
 public class RegistryProtocol implements Protocol, ScopeModelAware {
     public static final String[] DEFAULT_REGISTER_PROVIDER_KEYS = {
@@ -217,32 +220,41 @@ public class RegistryProtocol implements Protocol, ScopeModelAware {
             registered));
     }
 
+    /**
+     * important
+     * 服务注册的起点。 其中注册了两次 service-discovery-registry  / zookeeper
+     *
+     */
     @Override
     public <T> Exporter<T> export(final Invoker<T> originInvoker) throws RpcException {
+        // service-discovery-registry://127.0.0.1:2181/org.apache.dubbo.registry.RegistryService?application=dubbo-demo-api-provider&dubbo=2.0.2&pid=944&registry=zookeeper&timestamp=1653203121399
         URL registryUrl = getRegistryUrl(originInvoker);
         // url to export locally
+        // dubbo://169.254.88.110:20880/org.apache.dubbo.demo.DemoService?anyhost=true&application=dubbo-demo-api-provider&background=false&bind.ip=169.254.88.110&bind.port=20880&deprecated=false&dubbo=2.0.2&dynamic=true&generic=false&interface=org.apache.dubbo.demo.DemoService&metadata-type=remote&methods=sayHello,sayHelloAsync&pid=944&release=&service-name-mapping=true&side=provider&timestamp=1653203121409
         URL providerUrl = getProviderUrl(originInvoker);
 
         // Subscribe the override data
         // FIXME When the provider subscribes, it will affect the scene : a certain JVM exposes the service and call
         //  the same service. Because the subscribed is cached key with the name of the service, it causes the
         //  subscription information to cover.
+        // provider://169.254.88.110:20880/org.apache.dubbo.demo.DemoService?anyhost=true&application=dubbo-demo-api-provider&background=false&bind.ip=169.254.88.110&bind.port=20880&category=configurators&check=false&deprecated=false&dubbo=2.0.2&dynamic=true&generic=false&interface=org.apache.dubbo.demo.DemoService&metadata-type=remote&methods=sayHello,sayHelloAsync&pid=944&release=&service-name-mapping=true&side=provider&timestamp=1653203121409
         final URL overrideSubscribeUrl = getSubscribedOverrideUrl(providerUrl);
         final OverrideListener overrideSubscribeListener = new OverrideListener(overrideSubscribeUrl, originInvoker);
         Map<URL, NotifyListener> overrideListeners = getProviderConfigurationListener(providerUrl).getOverrideListeners();
         overrideListeners.put(registryUrl, overrideSubscribeListener);
 
         providerUrl = overrideUrlWithConfig(providerUrl, overrideSubscribeListener);
-        //export invoker
+        //important export invoker 暴露本地服务
         final ExporterChangeableWrapper<T> exporter = doLocalExport(originInvoker, providerUrl);
 
-        // url to registry
+        //important url to registry 获取到了Registry客户端
         final Registry registry = getRegistry(registryUrl);
         final URL registeredProviderUrl = getUrlToRegistry(providerUrl, registryUrl);
 
         // decide if we need to delay publish
         boolean register = providerUrl.getParameter(REGISTER_KEY, true);
         if (register) {
+            // important 服务提供者开始注册节点
             register(registry, registeredProviderUrl);
         }
 
@@ -463,6 +475,7 @@ public class RegistryProtocol implements Protocol, ScopeModelAware {
         return key;
     }
 
+    // important
     @Override
     @SuppressWarnings("unchecked")
     public <T> Invoker<T> refer(Class<T> type, URL url) throws RpcException {
@@ -528,12 +541,14 @@ public class RegistryProtocol implements Protocol, ScopeModelAware {
         }
 
         for (RegistryProtocolListener listener : listeners) {
+            // important
             listener.onRefer(this, invoker, consumerUrl, registryURL);
         }
         return invoker;
     }
 
     public <T> ClusterInvoker<T> getServiceDiscoveryInvoker(Cluster cluster, Registry registry, Class<T> type, URL url) {
+        // 继承，动态实现
         DynamicDirectory<T> directory = new ServiceDiscoveryRegistryDirectory<>(type, url);
         return doCreateInvoker(directory, cluster, registry, type);
     }
@@ -559,6 +574,8 @@ public class RegistryProtocol implements Protocol, ScopeModelAware {
             registry.register(directory.getRegisteredConsumerUrl());
         }
         directory.buildRouterChain(urlToRegistry);
+
+        // important 开始订阅的核心入口
         directory.subscribe(toSubscribeUrl(urlToRegistry));
 
         return (ClusterInvoker<T>) cluster.join(directory, true);

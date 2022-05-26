@@ -231,6 +231,7 @@ public class MigrationRuleListener implements RegistryProtocolListener, Configur
 
     }
 
+
     @Override
     public void onRefer(RegistryProtocol registryProtocol, ClusterInvoker<?> invoker, URL consumerUrl, URL registryURL) {
         MigrationRuleHandler<?> migrationRuleHandler = handlers.computeIfAbsent((MigrationInvoker<?>) invoker, _key -> {

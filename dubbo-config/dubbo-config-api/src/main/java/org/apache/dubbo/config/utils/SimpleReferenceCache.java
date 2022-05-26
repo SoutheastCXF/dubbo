@@ -107,6 +107,9 @@ public class SimpleReferenceCache implements ReferenceCache {
     public <T> T get(ReferenceConfigBase<T> rc) {
         String key = generator.generateKey(rc);
         Class<?> type = rc.getInterfaceClass();
+
+        // important
+        // 这里有个操作
         Object proxy = rc.get();
 
         references.computeIfAbsent(rc, _rc -> {

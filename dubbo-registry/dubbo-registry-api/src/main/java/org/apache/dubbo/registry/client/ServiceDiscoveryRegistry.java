@@ -227,6 +227,7 @@ public class ServiceDiscoveryRegistry extends FailbackRegistry {
             return;
         }
 
+        // important
         subscribeURLs(url, listener, subscribedServices);
     }
 
@@ -307,6 +308,7 @@ public class ServiceDiscoveryRegistry extends FailbackRegistry {
                 serviceInstancesChangedListener = serviceDiscovery.createListener(serviceNames);
                 serviceInstancesChangedListener.setUrl(url);
                 for (String serviceName : serviceNames) {
+                    // 应用实例
                     List<ServiceInstance> serviceInstances = serviceDiscovery.getInstances(serviceName);
                     if (CollectionUtils.isNotEmpty(serviceInstances)) {
                         serviceInstancesChangedListener.onEvent(new ServiceInstancesChangedEvent(serviceName, serviceInstances));
@@ -320,6 +322,8 @@ public class ServiceDiscoveryRegistry extends FailbackRegistry {
         serviceInstancesChangedListener.setUrl(url);
         listener.addServiceListener(serviceInstancesChangedListener);
         serviceInstancesChangedListener.addListenerAndNotify(protocolServiceKey, listener);
+
+        // important
         if (!serviceListenerRegistered) {
             serviceDiscovery.addServiceInstancesChangedListener(serviceInstancesChangedListener);
         }

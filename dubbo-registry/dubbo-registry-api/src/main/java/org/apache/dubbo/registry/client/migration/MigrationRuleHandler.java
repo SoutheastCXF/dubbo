@@ -37,12 +37,19 @@ public class MigrationRuleHandler<T> {
         this.consumerURL = url;
     }
 
+    /**
+     * important
+     * consumer 三种订阅方式的核心
+     *
+     * @param rule
+     */
     public synchronized void doMigrate(MigrationRule rule) {
         if (migrationInvoker instanceof ServiceDiscoveryMigrationInvoker) {
             refreshInvoker(MigrationStep.FORCE_APPLICATION, 1.0f, rule);
             return;
         }
 
+        // 默认情况下
         // initial step : APPLICATION_FIRST
         MigrationStep step = MigrationStep.APPLICATION_FIRST;
         float threshold = -1f;
@@ -60,6 +67,7 @@ public class MigrationRuleHandler<T> {
         }
     }
 
+    // important
     private boolean refreshInvoker(MigrationStep step, Float threshold, MigrationRule newRule) {
         if (step == null || threshold == null) {
             throw new IllegalStateException("Step or threshold of migration rule cannot be null");
@@ -68,6 +76,7 @@ public class MigrationRuleHandler<T> {
 
         if ((currentStep == null || currentStep != step) || !currentThreshold.equals(threshold)) {
             boolean success = true;
+            // 三种订阅模式的核心处理
             switch (step) {
                 case APPLICATION_FIRST:
                     migrationInvoker.migrateToApplicationFirstInvoker(newRule);

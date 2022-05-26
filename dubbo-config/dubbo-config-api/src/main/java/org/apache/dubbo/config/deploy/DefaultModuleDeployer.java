@@ -138,7 +138,8 @@ public class DefaultModuleDeployer extends AbstractDeployer<ModuleModel> impleme
             applicationDeployer.initialize();
             initialize();
 
-            // export services
+            // important
+            // export services 当bootstrap启动时，暴露外部服务
             exportServices();
 
             // prepare application instance
@@ -147,6 +148,7 @@ public class DefaultModuleDeployer extends AbstractDeployer<ModuleModel> impleme
                 applicationDeployer.prepareApplicationInstance();
             }
 
+            // important
             // refer services
             referServices();
 

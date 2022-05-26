@@ -88,6 +88,7 @@ import static org.apache.dubbo.registry.client.metadata.ServiceInstanceMetadataU
 import static org.apache.dubbo.remoting.Constants.CLIENT_KEY;
 
 /**
+ * important
  * initialize and start application instance
  */
 public class DefaultApplicationDeployer extends AbstractDeployer<ApplicationModel> implements ApplicationDeployer {

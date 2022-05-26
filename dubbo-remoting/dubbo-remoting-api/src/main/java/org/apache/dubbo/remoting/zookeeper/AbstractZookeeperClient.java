@@ -66,7 +66,11 @@ public abstract class AbstractZookeeperClient<TargetDataListener, TargetChildLis
         deletePath(path);
     }
 
-
+    /**
+     * zookeeper创建节点
+     * @param path
+     * @param ephemeral 是否是永久节点
+     */
     @Override
     public void create(String path, boolean ephemeral) {
         if (!ephemeral) {

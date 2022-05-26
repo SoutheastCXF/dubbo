@@ -34,6 +34,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.ApplicationEventPublisherAware;
 
 /**
+ * important
  * ServiceFactoryBean
  *
  * @export
@@ -50,6 +51,7 @@ public class ServiceBean<T> extends ServiceConfig<T> implements InitializingBean
 
     private transient String beanName;
 
+    // 应用事件发布Publisher
     private ApplicationEventPublisher applicationEventPublisher;
 
     public ServiceBean() {

@@ -452,7 +452,8 @@ public abstract class AbstractRegistry implements Registry {
         }
     }
 
-    // 保存单个消费者URL对应，在`notified`的数据，到文件
+    // important
+    // 保存单个消费者URL对应，在`notified`的数据，到文件 【本地文件下 ~/.dubbo】
     private void saveProperties(URL url) {
         if (file == null) {
             return;
@@ -474,6 +475,7 @@ public abstract class AbstractRegistry implements Registry {
             properties.setProperty(url.getServiceKey(), buf.toString());
             long version = lastCacheChanged.incrementAndGet();
             if (syncSaveFile) {
+                // 将注册、订阅信息保存到本地文件
                 doSaveProperties(version);
             } else {
                 registryCacheExecutor.execute(new SaveProperties(version));
