@@ -211,6 +211,7 @@ public class ServiceConfig<T> extends ServiceConfigBase<T> {
         serviceMetadata.generateServiceKey();
     }
 
+    // 服务暴露入口
     // important
     @Override
     public void export() {

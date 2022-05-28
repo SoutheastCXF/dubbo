@@ -22,6 +22,7 @@ import org.apache.dubbo.common.extension.ExtensionScope;
 import org.apache.dubbo.common.extension.SPI;
 
 /**
+ * // remoting层
  * Transporter. (SPI, Singleton, ThreadSafe)
  *
  * 网络传输接口

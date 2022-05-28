@@ -16,16 +16,12 @@
  */
 package org.apache.dubbo.demo.provider;
 
-import org.apache.dubbo.demo.provider.test.InjvmClient;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 public class Application {
     public static void main(String[] args) throws Exception {
         ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring/dubbo-provider.xml");
         context.start();
-
-//        InjvmClient injvmClient = (InjvmClient) context.getBean("injvmClient");
-//        injvmClient.test(context);
 
         System.in.read();
     }

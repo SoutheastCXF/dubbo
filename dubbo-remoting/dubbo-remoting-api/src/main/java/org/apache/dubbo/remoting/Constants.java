@@ -80,7 +80,6 @@ public interface Constants {
     String SERIALIZATION_KEY = "serialization";
 
     String DEFAULT_REMOTING_SERIALIZATION = "hessian2";
-
     String CODEC_KEY = "codec";
 
     String CODEC_VERSION_KEY = "codec.version";

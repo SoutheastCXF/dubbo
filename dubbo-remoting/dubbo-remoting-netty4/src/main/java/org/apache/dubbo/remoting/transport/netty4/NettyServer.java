@@ -71,6 +71,7 @@ public class NettyServer extends AbstractServer {
      */
     private ServerBootstrap bootstrap;
     /**
+     * important
      * the boss channel that receive connections and dispatch these to worker channel.
      */
     private io.netty.channel.Channel channel;
@@ -89,6 +90,7 @@ public class NettyServer extends AbstractServer {
     }
 
     /**
+     * important 这里就是netty的初始化的地方
      * Init and start netty server
      *
      * @throws Throwable
@@ -108,6 +110,7 @@ public class NettyServer extends AbstractServer {
         boolean keepalive = getUrl().getParameter(KEEP_ALIVE_KEY, Boolean.FALSE);
 
         bootstrap.group(bossGroup, workerGroup)
+                // 选择epoll or nio
                 .channel(NettyEventLoopFactory.serverSocketChannelClass())
                 .option(ChannelOption.SO_REUSEADDR, Boolean.TRUE)
                 .childOption(ChannelOption.TCP_NODELAY, Boolean.TRUE)
@@ -117,6 +120,7 @@ public class NettyServer extends AbstractServer {
                     @Override
                     protected void initChannel(SocketChannel ch) throws Exception {
                         // FIXME: should we use getTimeout()?
+                        // important
                         int idleTimeout = UrlUtils.getIdleTimeout(getUrl());
                         NettyCodecAdapter adapter = new NettyCodecAdapter(getCodec(), getUrl(), NettyServer.this);
                         if (getUrl().getParameter(SSL_ENABLED_KEY, false)) {
