@@ -294,6 +294,7 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
     }
 
     /**
+     * important
      * Specific implementation of the {@link #invoke(Invocation)} method
      */
     protected abstract Result doInvoke(Invocation invocation) throws Throwable;

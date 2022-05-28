@@ -968,6 +968,7 @@ public class ReferenceConfigTest {
         serviceConfig.setRegistry(new RegistryConfig(zkUrl1));
         serviceConfig.setScopeModel(moduleModel);
         serviceConfig.setRef(demoService);
+        // provider 注册服务
         serviceConfig.export();
 
         String basePath = DemoService.class.getProtectionDomain().getCodeSource().getLocation().getFile();

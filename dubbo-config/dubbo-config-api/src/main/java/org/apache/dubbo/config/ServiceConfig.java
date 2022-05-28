@@ -634,11 +634,14 @@ public class ServiceConfig<T> extends ServiceConfigBase<T> {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     private void doExportUrl(URL url, boolean withMetaData) {
+        // 获取执行代理的invoker对象
+        // 此时的Invoker是AbstractProxyInvoker
         Invoker<?> invoker = proxyFactory.getInvoker(ref, (Class) interfaceClass, url);
         if (withMetaData) {
             invoker = new DelegateProviderMetaDataInvoker(invoker, this);
         }
         // important 服务注册
+        // export再次包装了invoker
         Exporter<?> exporter = protocolSPI.export(invoker);
         exporters.add(exporter);
     }

@@ -92,6 +92,7 @@ public class InjvmProtocolTest {
         assertEquals(service.getSize(new String[]{"", "", ""}), 3);
     }
 
+    // important
     @Test
     public void testIsInjvmRefer() throws Exception {
         DemoService service = new DemoServiceImpl();

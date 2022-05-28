@@ -58,6 +58,11 @@ public class InvokerInvocationHandler implements InvocationHandler {
         this.serviceModel = this.url.getServiceModel();
     }
 
+    /**
+     * proxy执行时，会调用相应的invoke，即JavassistProxyFactory生成的proxy在执行时，会调用当前handle.invoke去执行
+     * important
+     * rpc consumer invoker provider时，代理触发
+     */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         if (method.getDeclaringClass() == Object.class) {

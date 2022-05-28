@@ -80,6 +80,7 @@ public class InjvmInvoker<T> extends AbstractInvoker<T> {
 
     @Override
     public Result doInvoke(Invocation invocation) throws Throwable {
+        // 从exporter内存中获取对应的exporter
         Exporter<?> exporter = InjvmProtocol.getExporter(exporterMap, getUrl());
         if (exporter == null) {
             throw new RpcException("Service [" + key + "] not found.");
@@ -117,6 +118,7 @@ public class InjvmInvoker<T> extends AbstractInvoker<T> {
             result.setExecutor(executor);
             return result;
         } else {
+            // todo 这里还是没看懂。这个时候的invoker到底是啥
             Result result = invoker.invoke(copiedInvocation);
             if (result.hasException()) {
                 return result;
