@@ -31,6 +31,7 @@ import java.io.IOException;
 import java.util.List;
 
 /**
+ * important. netty的 encode / decode
  * NettyCodecAdapter.
  */
 final public class NettyCodecAdapter {
@@ -65,6 +66,7 @@ final public class NettyCodecAdapter {
         protected void encode(ChannelHandlerContext ctx, Object msg, ByteBuf out) throws Exception {
             ChannelBuffer buffer = new NettyBackedChannelBuffer(out);
             Channel ch = ctx.channel();
+            // wrap
             NettyChannel channel = NettyChannel.getOrAddChannel(ch, url, handler);
             codec.encode(channel, buffer, msg);
         }
@@ -84,6 +86,7 @@ final public class NettyCodecAdapter {
                 int saveReaderIndex = message.readerIndex();
                 Object msg = codec.decode(channel, message);
                 if (msg == Codec2.DecodeResult.NEED_MORE_INPUT) {
+                    // important 这里是不是用于解决粘包问题
                     message.readerIndex(saveReaderIndex);
                     break;
                 } else {

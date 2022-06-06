@@ -70,6 +70,8 @@ public class HeaderExchangeServer implements ExchangeServer {
     public HeaderExchangeServer(RemotingServer server) {
         Assert.notNull(server, "server == null");
         this.server = server;
+        // important
+        // 作用，当服务器支持空闲检查时，进行校验，并在满足的前提下创建一个CloseTimeTask
         startIdleCheckTask(getUrl());
     }
 
@@ -273,6 +275,7 @@ public class HeaderExchangeServer implements ExchangeServer {
     private void startIdleCheckTask(URL url) {
         if (!server.canHandleIdle()) {
             AbstractTimerTask.ChannelProvider cp = () -> unmodifiableCollection(HeaderExchangeServer.this.getChannels());
+            // 获取idle timeout时间
             int idleTimeout = getIdleTimeout(url);
             long idleTimeoutTick = calculateLeastDuration(idleTimeout);
             CloseTimerTask closeTimerTask = new CloseTimerTask(cp, idleTimeoutTick, idleTimeout);

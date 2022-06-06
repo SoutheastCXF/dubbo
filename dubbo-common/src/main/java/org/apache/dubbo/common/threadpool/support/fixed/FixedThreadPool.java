@@ -41,16 +41,22 @@ import static org.apache.dubbo.common.constants.CommonConstants.THREAD_NAME_KEY;
  */
 public class FixedThreadPool implements ThreadPool {
 
+    /**
+     * protocol协议中，可进行配置
+     *
+     * @param url URL contains thread parameter
+     * @return
+     */
     @Override
     public Executor getExecutor(URL url) {
         String name = url.getParameter(THREAD_NAME_KEY, (String) url.getAttribute(THREAD_NAME_KEY, DEFAULT_THREAD_NAME));
         int threads = url.getParameter(THREADS_KEY, DEFAULT_THREADS);
         int queues = url.getParameter(QUEUES_KEY, DEFAULT_QUEUES);
         return new ThreadPoolExecutor(threads, threads, 0, TimeUnit.MILLISECONDS,
-                queues == 0 ? new SynchronousQueue<Runnable>() :
-                        (queues < 0 ? new LinkedBlockingQueue<Runnable>()
-                                : new LinkedBlockingQueue<Runnable>(queues)),
-                new NamedInternalThreadFactory(name, true), new AbortPolicyWithReport(name, url));
+            queues == 0 ? new SynchronousQueue<Runnable>() :
+                (queues < 0 ? new LinkedBlockingQueue<Runnable>()
+                    : new LinkedBlockingQueue<Runnable>(queues)),
+            new NamedInternalThreadFactory(name, true), new AbortPolicyWithReport(name, url));
     }
 
 }

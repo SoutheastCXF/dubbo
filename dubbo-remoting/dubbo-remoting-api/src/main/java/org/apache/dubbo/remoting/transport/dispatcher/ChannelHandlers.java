@@ -29,6 +29,7 @@ public class ChannelHandlers {
     protected ChannelHandlers() {
     }
 
+    // 执行Dubbo的线程模型
     public static ChannelHandler wrap(ChannelHandler handler, URL url) {
         return ChannelHandlers.getInstance().wrapInternal(handler, url);
     }
@@ -41,8 +42,16 @@ public class ChannelHandlers {
         INSTANCE = instance;
     }
 
+    // 内部包装器
+    // netty的channelHandler被包装了好几层
     protected ChannelHandler wrapInternal(ChannelHandler handler, URL url) {
-        return new MultiMessageHandler(new HeartbeatHandler(url.getOrDefaultFrameworkModel().getExtensionLoader(Dispatcher.class)
-                .getAdaptiveExtension().dispatch(handler, url)));
+        return new MultiMessageHandler(
+            new HeartbeatHandler(
+                // 获取相应的DispatchHandler，其中该DispatchHandler是一个包装类，真正执行netty传输的，还是需要依靠传入的handler
+                url.getOrDefaultFrameworkModel().getExtensionLoader(Dispatcher.class)
+                    .getAdaptiveExtension()
+                    .dispatch(handler, url)
+            )
+        );
     }
 }

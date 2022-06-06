@@ -51,6 +51,7 @@ public abstract class AbstractServer extends AbstractEndpoint implements Remotin
 
     private ExecutorRepository executorRepository;
 
+    // important 这个时候传入的handler就是被封装过的
     public AbstractServer(URL url, ChannelHandler handler) throws RemotingException {
         super(url, handler);
         executorRepository = url.getOrDefaultApplicationModel().getExtensionLoader(ExecutorRepository.class).getDefaultExtension();

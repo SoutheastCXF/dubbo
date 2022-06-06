@@ -34,6 +34,9 @@ import static org.apache.dubbo.common.constants.CommonConstants.SERVICE_FILTER_K
 
 /**
  * ListenerProtocol
+ * 当时疑惑的点，现在终于来了。 构建FilterChainBuilder
+ *
+ * serviceConfig.export / referenceConfig.refer
  */
 @Activate(order = 100)
 public class ProtocolFilterWrapper implements Protocol {

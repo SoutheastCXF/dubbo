@@ -30,6 +30,9 @@ import org.apache.dubbo.rpc.cluster.Directory;
 
 import static org.apache.dubbo.common.extension.ExtensionScope.APPLICATION;
 
+/**
+ * important Filter 责任链模式
+ */
 @SPI(value = "default", scope = APPLICATION)
 public interface FilterChainBuilder {
     /**

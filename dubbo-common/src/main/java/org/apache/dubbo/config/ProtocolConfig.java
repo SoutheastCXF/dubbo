@@ -26,6 +26,7 @@ import static org.apache.dubbo.common.constants.CommonConstants.DUBBO_PROTOCOL;
 import static org.apache.dubbo.common.constants.CommonConstants.SSL_ENABLED_KEY;
 
 /**
+ * 协议配置
  * ProtocolConfig
  *
  * @export

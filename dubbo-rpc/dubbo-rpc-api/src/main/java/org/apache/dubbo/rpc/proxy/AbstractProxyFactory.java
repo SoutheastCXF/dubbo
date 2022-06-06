@@ -67,6 +67,7 @@ public abstract class AbstractProxyFactory implements ProxyFactory {
         }
 
         if (generic) {
+            // 泛化调用
             try {
                 // find the real interface from url
                 String realInterface = invoker.getUrl().getParameter(Constants.INTERFACE);

@@ -40,6 +40,9 @@ import static org.apache.dubbo.remoting.Constants.CONNECT_QUEUE_CAPACITY;
 import static org.apache.dubbo.remoting.Constants.CONNECT_QUEUE_WARNING_SIZE;
 import static org.apache.dubbo.remoting.Constants.DEFAULT_CONNECT_QUEUE_WARNING_SIZE;
 
+/**
+ * connectionExecutor实现连接，断开连接的有序操作
+ */
 public class ConnectionOrderedChannelHandler extends WrappedChannelHandler {
 
     protected final ThreadPoolExecutor connectionExecutor;

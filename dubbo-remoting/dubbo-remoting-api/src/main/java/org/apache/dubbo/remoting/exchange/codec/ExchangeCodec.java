@@ -64,12 +64,13 @@ public class ExchangeCodec extends TelnetCodec {
     public Short getMagicCode() {
         return MAGIC;
     }
-
     @Override
     public void encode(Channel channel, ChannelBuffer buffer, Object msg) throws IOException {
         if (msg instanceof Request) {
+            // 请求 consumer
             encodeRequest(channel, buffer, (Request) msg);
         } else if (msg instanceof Response) {
+            // 响应 provider
             encodeResponse(channel, buffer, (Response) msg);
         } else {
             super.encode(channel, buffer, msg);
@@ -328,7 +329,7 @@ public class ExchangeCodec extends TelnetCodec {
             int len = bos.writtenBytes();
             checkPayload(channel, len);
             Bytes.int2bytes(len, header, 12);
-            // write
+            // write，这里的顺序需要思考一下
             buffer.writerIndex(savedWriteIndex);
             buffer.writeBytes(header); // write header.
             buffer.writerIndex(savedWriteIndex + HEADER_LENGTH + len);

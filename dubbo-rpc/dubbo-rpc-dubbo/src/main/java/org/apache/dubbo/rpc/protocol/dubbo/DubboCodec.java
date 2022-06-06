@@ -186,8 +186,10 @@ public class DubboCodec extends ExchangeCodec {
         encodeResponseData(channel, out, data, DUBBO_VERSION);
     }
 
+    // important
     @Override
     protected void encodeRequestData(Channel channel, ObjectOutput out, Object data, String version) throws IOException {
+        //  org.apache.dubbo.rpc.proxy.InvokerInvocationHandler，该类在触发rpc调用时，会new一个RpcInvocation
         RpcInvocation inv = (RpcInvocation) data;
 
         out.writeUTF(version);

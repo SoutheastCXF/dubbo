@@ -149,6 +149,7 @@ public class DubboProtocol extends AbstractProtocol {
                 }
             }
             RpcContext.getServiceContext().setRemoteAddress(channel.getRemoteAddress());
+            // 代理调用
             Result result = invoker.invoke(inv);
             return result.thenApply(Function.identity());
         }
@@ -326,6 +327,7 @@ public class DubboProtocol extends AbstractProtocol {
         if (isServer) {
             ProtocolServer server = serverMap.get(key);
             if (server == null) {
+                // 双重锁来判断，server是否真的启动了
                 synchronized (this) {
                     server = serverMap.get(key);
                     if (server == null) {

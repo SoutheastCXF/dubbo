@@ -223,6 +223,7 @@ public abstract class Proxy {
             ccm.setClassName(fcn);
             ccm.addDefaultConstructor();
             ccm.setSuperClass(Proxy.class);
+            // 这里进行了继承Proxy.new Instance的方法
             ccm.addMethod("public Object newInstance(" + InvocationHandler.class.getName() + " h){ return new " + pcn + "($1); }");
             Class<?> pc = ccm.toClass(appClassLoader, domain);
             proxy = (Proxy) pc.newInstance();

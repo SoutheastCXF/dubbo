@@ -91,7 +91,7 @@ import java.util.Map;
  * }
  * </pre>
  *
- *
+ * @desc 继承了FactoryBean。 实现了getObject的核心方法
  * @see org.apache.dubbo.config.annotation.DubboReference
  * @see org.apache.dubbo.config.spring.reference.ReferenceBeanBuilder
  */
@@ -317,7 +317,6 @@ public class ReferenceBean<T> implements FactoryBean<T>,
      * Create lazy proxy for reference.
      */
     private void createLazyProxy() {
-
         //set proxy interfaces
         //see also: org.apache.dubbo.rpc.proxy.AbstractProxyFactory.getProxy(org.apache.dubbo.rpc.Invoker<T>, boolean)
         ProxyFactory proxyFactory = new ProxyFactory();
@@ -336,7 +335,7 @@ public class ReferenceBean<T> implements FactoryBean<T>,
                 // generic call maybe without service interface class locally
             }
         }
-
+        //
         this.lazyProxy = proxyFactory.getProxy(this.beanClassLoader);
     }
 

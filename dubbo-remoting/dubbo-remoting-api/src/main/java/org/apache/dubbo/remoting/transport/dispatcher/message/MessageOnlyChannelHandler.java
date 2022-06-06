@@ -35,8 +35,10 @@ public class MessageOnlyChannelHandler extends WrappedChannelHandler {
         super(handler, url);
     }
 
+    // important received实现
     @Override
     public void received(Channel channel, Object message) throws RemotingException {
+        // Dubbo线程池
         ExecutorService executor = getPreferredExecutorService(message);
         try {
             executor.execute(new ChannelEventRunnable(channel, handler, ChannelState.RECEIVED, message));

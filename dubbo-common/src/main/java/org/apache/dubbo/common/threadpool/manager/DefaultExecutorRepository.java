@@ -137,6 +137,7 @@ public class DefaultExecutorRepository implements ExecutorRepository, ExtensionA
         // If executor has been shut down, create a new one
         if (executor.isShutdown() || executor.isTerminated()) {
             executors.remove(portKey);
+            // 创建线程池的地方
             executor = createExecutor(url);
             executors.put(portKey, executor);
         }

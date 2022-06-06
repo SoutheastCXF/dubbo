@@ -480,6 +480,7 @@ public class ReferenceConfig<T> extends ReferenceConfigBase<T> {
     private void createInvokerForRemote() {
         if (urls.size() == 1) {
             URL curUrl = urls.get(0);
+            // 指定url的场景，就可以直接生成代理了
             invoker = protocolSPI.refer(interfaceClass, curUrl);
             if (!UrlUtils.isRegistry(curUrl)) {
                 List<Invoker<?>> invokers = new ArrayList<>();
