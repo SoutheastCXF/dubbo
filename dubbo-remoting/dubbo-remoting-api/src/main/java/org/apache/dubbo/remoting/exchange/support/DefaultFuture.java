@@ -49,8 +49,10 @@ public class DefaultFuture extends CompletableFuture<Object> {
 
     private static final Logger logger = LoggerFactory.getLogger(DefaultFuture.class);
 
+    // static 缓存channel
     private static final Map<Long, Channel> CHANNELS = new ConcurrentHashMap<>();
 
+    // static 缓存future
     private static final Map<Long, DefaultFuture> FUTURES = new ConcurrentHashMap<>();
 
     private static GlobalResourceInitializer<Timer> TIME_OUT_TIMER = new GlobalResourceInitializer<>(() -> new HashedWheelTimer(
@@ -160,12 +162,14 @@ public class DefaultFuture extends CompletableFuture<Object> {
         }
     }
 
+    // 介绍服务端数据
     public static void received(Channel channel, Response response) {
         received(channel, response, false);
     }
 
     public static void received(Channel channel, Response response, boolean timeout) {
         try {
+            // 之前send的时候，将requestId 与 DefaultFuture进行了缓存，因此当receive时，能够接收到response的requestIde，获取
             DefaultFuture future = FUTURES.remove(response.getId());
             if (future != null) {
                 Timeout t = future.timeoutCheckTask;
@@ -207,6 +211,7 @@ public class DefaultFuture extends CompletableFuture<Object> {
             throw new IllegalStateException("response cannot be null");
         }
         if (res.getStatus() == Response.OK) {
+            // important， 主动完成future任务
             this.complete(res.getResult());
         } else if (res.getStatus() == Response.CLIENT_TIMEOUT || res.getStatus() == Response.SERVER_TIMEOUT) {
             this.completeExceptionally(new TimeoutException(res.getStatus() == Response.SERVER_TIMEOUT, channel, res.getErrorMessage()));

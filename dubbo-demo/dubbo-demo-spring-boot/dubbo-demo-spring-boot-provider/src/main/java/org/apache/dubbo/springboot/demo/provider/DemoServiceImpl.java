@@ -26,6 +26,9 @@ public class DemoServiceImpl implements DemoService {
 
     @Override
     public String sayHello(String name) {
+
+        String word = RpcContext.getServiceContext().getAttachment("word");
+
         System.out.println("Hello " + name + ", request from consumer: " + RpcContext.getContext().getRemoteAddress());
         return "Hello " + name;
     }

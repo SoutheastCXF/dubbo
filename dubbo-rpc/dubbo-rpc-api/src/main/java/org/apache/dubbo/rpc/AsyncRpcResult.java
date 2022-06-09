@@ -143,6 +143,7 @@ public class AsyncRpcResult implements Result {
     public Result getAppResponse() {
         try {
             if (responseFuture.isDone()) {
+                // Future.get()
                 return responseFuture.get();
             }
         } catch (Exception e) {

@@ -25,6 +25,8 @@ import org.apache.dubbo.rpc.Result;
 import org.apache.dubbo.rpc.RpcException;
 
 /**
+ *
+ * important
  * Set the current execution thread class loader to service interface's class loader.
  */
 @Activate(group = CommonConstants.PROVIDER, order = -30000)
@@ -33,6 +35,7 @@ public class ClassLoaderFilter implements Filter {
     @Override
     public Result invoke(Invoker<?> invoker, Invocation invocation) throws RpcException {
         ClassLoader ocl = Thread.currentThread().getContextClassLoader();
+        ClassLoader classLoader = invoker.getInterface().getClassLoader();
         Thread.currentThread().setContextClassLoader(invoker.getInterface().getClassLoader());
         try {
             return invoker.invoke(invocation);

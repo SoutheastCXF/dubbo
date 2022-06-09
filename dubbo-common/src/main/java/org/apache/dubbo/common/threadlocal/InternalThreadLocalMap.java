@@ -32,6 +32,7 @@ public final class InternalThreadLocalMap {
 
     private static final AtomicInteger NEXT_INDEX = new AtomicInteger();
 
+    // none-sense object
     public static final Object UNSET = new Object();
 
     public static InternalThreadLocalMap getIfSet() {
@@ -151,6 +152,7 @@ public final class InternalThreadLocalMap {
     }
 
     private static InternalThreadLocalMap slowGet() {
+        // 从InternalThreadLocalMap中获取InternalThreadLocalMap
         ThreadLocal<InternalThreadLocalMap> slowThreadLocalMap = InternalThreadLocalMap.slowThreadLocalMap;
         InternalThreadLocalMap ret = slowThreadLocalMap.get();
         if (ret == null) {

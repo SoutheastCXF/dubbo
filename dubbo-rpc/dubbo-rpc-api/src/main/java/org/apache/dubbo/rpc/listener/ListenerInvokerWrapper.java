@@ -30,6 +30,8 @@ import java.util.List;
 
 /**
  * ListenerInvoker
+ *
+ * important, ReferenceConfig.refer。ListenerInvokerWrapper 包装了协议Invoker + listener
  */
 public class ListenerInvokerWrapper<T> implements Invoker<T> {
 

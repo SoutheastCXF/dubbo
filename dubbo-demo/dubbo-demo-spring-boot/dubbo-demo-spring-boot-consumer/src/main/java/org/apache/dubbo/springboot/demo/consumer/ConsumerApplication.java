@@ -18,7 +18,9 @@
 package org.apache.dubbo.springboot.demo.consumer;
 
 import org.apache.dubbo.config.annotation.DubboReference;
+import org.apache.dubbo.config.annotation.Method;
 import org.apache.dubbo.config.spring.context.annotation.EnableDubbo;
+import org.apache.dubbo.rpc.RpcContext;
 import org.apache.dubbo.springboot.demo.DemoService;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,13 +32,18 @@ import org.springframework.stereotype.Service;
 @EnableDubbo
 public class ConsumerApplication {
 
-    @DubboReference
+    @DubboReference(methods = {@Method(name = "sayHello",
+        onreturn = "resultCallBack.doReturn",
+        oninvoke = "resultCallBack.doInvoker",
+        onthrow = "resultCallBack.doThrow"
+    )})
     private DemoService demoService;
 
     public static void main(String[] args) {
 
         ConfigurableApplicationContext context = SpringApplication.run(ConsumerApplication.class, args);
         ConsumerApplication application = context.getBean(ConsumerApplication.class);
+        RpcContext.getServiceContext().setAttachment("word", "abc");
         String result = application.doSayHello("world");
         System.out.println("result: " + result);
     }

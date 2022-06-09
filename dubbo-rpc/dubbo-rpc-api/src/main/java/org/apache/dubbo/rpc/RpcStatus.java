@@ -96,6 +96,8 @@ public class RpcStatus {
     }
 
     /**
+     * 并发次数
+     *
      * @param url
      */
     public static boolean beginCount(URL url, String methodName, int max) {

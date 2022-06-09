@@ -175,6 +175,7 @@ public abstract class AbstractInvoker<T> implements Invoker<T> {
         // do invoke rpc invocation and return async result
         AsyncRpcResult asyncResult = doInvokeAndReturn(invocation);
 
+        // important  如果是同步的，等待执行结果
         // wait rpc result if sync
         waitForResultIfSync(asyncResult, invocation);
 
